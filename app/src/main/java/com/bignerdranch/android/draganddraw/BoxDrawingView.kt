@@ -1,5 +1,6 @@
 package com.bignerdranch.android.draganddraw
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
@@ -17,15 +18,17 @@ class BoxDrawingView(
 ) : View(context, attrs) {
     private var currentBox: Box? = null
     private val boxes = mutableListOf<Box>()
-    private val boxPaint = Paint().apply { color = 0x22ff0000.toInt() }
+    private val boxPaint = Paint().apply { color = 0x44f3ff00 }
     private val backgroundPaint = Paint().apply { color = 0xfff8efe0.toInt() }
+    @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
         val current = PointF(event.x, event.y)
         var action = ""
         when (event.action) {
+
             MotionEvent.ACTION_DOWN -> {
                 action = "ACTION_DOWN"
-// Reset drawing state
+
                 currentBox = Box(current).also {
                     boxes.add(it)
                 }
@@ -34,6 +37,8 @@ class BoxDrawingView(
                 action = "ACTION_MOVE"
                 updateCurrentBox(current)
             }
+
+
             MotionEvent.ACTION_UP -> {
                 action = "ACTION_UP"
                 updateCurrentBox(current)
@@ -43,6 +48,11 @@ class BoxDrawingView(
                 action = "ACTION_CANCEL"
                 currentBox = null
             }
+
+            MotionEvent.EDGE_RIGHT -> {
+                action = "XXXXXXXXXXXXX"
+                boxes.clear()
+            }
         }
         Log.i(TAG, "$action at x=${current.x}, y=${current.y}")
         return true
@@ -50,7 +60,7 @@ class BoxDrawingView(
 
     override fun onDraw(canvas: Canvas) {
         canvas.drawPaint(backgroundPaint)
-        boxes.forEach{box -> canvas.drawRect(box.left, box.top, box.right, box.bottom, boxPaint)}
+        boxes.forEach { box -> canvas.drawRect(box.left, box.top, box.right, box.bottom, boxPaint) }
     }
 
     private fun updateCurrentBox(current: PointF) {

@@ -12,8 +12,8 @@ class Box(val start: PointF) {
         get() = max(start.x, end.x)
 
     val top: Float
-        get() = min(start.x, end.x)
+        get() = min(start.y, end.y)
 
     val bottom: Float
-        get() = max(start.x, end.x)
+        get() = max(start.y, end.y)
 }
